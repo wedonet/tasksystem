@@ -134,21 +134,41 @@ class Myclass extends Cls_task {
 
 
 		$sql .= ' and isshow=1 ';
+		$sql .= ' and isdel=0 ';
 
 
 
 		/* 计划时间段 */
-		if ('' != $dtime1) {
-			$sql .= ' and dtimesint>=' . strtotime($dtime1);
+        /* 计划时间段 */
+		switch ($taskstatus) {
+		    case 'new':
+				if ('' != $dtime1) {
+					$sql .= ' and stimeint>=' . strtotime($dtime1);
+				}
+
+				if ('' != $dtime2) {
+					$sql .= ' and stimeint<=' . strtotime($dtime2);
+				}
+				break;
+			case 'over':
+				if ('' != $dtime1) {
+					$sql .= ' and (dtimesint>=' . strtotime($dtime1) .' )';
+				}
+
+				if ('' != $dtime2) {
+					$sql .= ' and dtimesint<=' . strtotime($dtime2);
+				}	
+			    break;
+			default:
+				if ('' != $dtime1) {
+					$sql .= ' and (dtimesint>=' . strtotime($dtime1) . ' or stimeint>='. strtotime($dtime1) .' )';
+				}
+
+				if ('' != $dtime2) {
+					$sql .= ' and dtimesint<=' . strtotime($dtime2);
+				}
+				break;		
 		}
-
-		if ('' != $dtime1) {
-			$sql .= ' and dtimesint<=' . strtotime($dtime2);
-		}
-
-		$sql .= ' and isdel=0 ';
-		$sql .= ' order by id desc ';
-
 //stop($sql);
 
 

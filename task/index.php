@@ -127,13 +127,27 @@ class Myclass extends Cls_task {
 
 
         /* 计划时间段 */
-        if ('' != $dtime1) {
-            $sql .= ' and dtimesint>=' . strtotime($dtime1);
-        }
+		switch ($taskstatus) {
+		    case 'new':
+				if ('' != $dtime1) {
+					$sql .= ' and stimeint>=' . strtotime($dtime1);
+				}
 
-        if ('' != $dtime2) {
-            $sql .= ' and dtimesint<=' . strtotime($dtime2);
-        }
+				if ('' != $dtime2) {
+					$sql .= ' and stimeint<=' . strtotime($dtime2);
+				}
+				break;
+			default:
+				if ('' != $dtime1) {
+					$sql .= ' and dtimesint>=' . strtotime($dtime1);
+				}
+
+				if ('' != $dtime2) {
+					$sql .= ' and dtimesint<=' . strtotime($dtime2);
+				}
+				break;		
+		}
+
 
         $sql .= ' and isdel=0 ';
         $sql .= ' and pid=0 ';
@@ -142,6 +156,7 @@ class Myclass extends Cls_task {
         $sql .= ' and myrange <> "adjust" ';
 
         $sql .= ' order by id desc ';
+
 
         $result = $this->main->exers($sql);
 
